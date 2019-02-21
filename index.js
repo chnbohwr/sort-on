@@ -1,10 +1,45 @@
-'use strict';
-const dotProp = require('dot-prop-immutable');
-const arrify = require('arrify');
+const propToArray = (prop) => {
+	return prop.split('.').reduce(function (ret, el, index, list) {
+		var last = index > 0 && list[index - 1];
+		if (last && /(?:^|[^\\])\\$/.test(last)) {
+			ret.pop();
+			ret.push(last.slice(0, -1) + '.' + el);
+		} else {
+			ret.push(el);
+		}
+		return ret;
+	}, []);
+}
 
-const dotPropGet = dotProp.get;
+const arrify = (val) => {
+	if (val === null || val === undefined) {
+		return [];
+	}
+	return Array.isArray(val) ? val : [val];
+};
 
-module.exports = (arr, prop) => {
+const dotPropGet = (obj, prop, value) => {
+	prop = typeof prop === 'number' ? propToArray(prop.toString()) : typeof prop === 'string' ? propToArray(prop) : prop;
+
+	for (var i = 0; i < prop.length; i++) {
+		if (typeof obj !== 'object') {
+			return value;
+		}
+		var head = prop[i];
+		if (Array.isArray(obj) && head === '$end') {
+			head = obj.length - 1;
+		}
+		obj = obj[head];
+	}
+
+	if (typeof obj === 'undefined') {
+		return value;
+	}
+
+	return obj;
+};
+
+const sortOn = (arr, prop) => {
 	if (!Array.isArray(arr)) {
 		throw new TypeError('Expected an array');
 	}
@@ -62,3 +97,5 @@ module.exports = (arr, prop) => {
 		return ret;
 	});
 };
+
+export default sortOn;

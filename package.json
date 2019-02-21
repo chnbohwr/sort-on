@@ -13,11 +13,10 @@
 		"node": ">=4"
 	},
 	"scripts": {
-		"test": "xo && ava"
+		"test": "xo && ava",
+		"build": "babel index.js --out-dir bin/"
 	},
-	"files": [
-		"index.js"
-	],
+	"main": "bin/index.js",
 	"keywords": [
 		"sort",
 		"sorting",
@@ -33,11 +32,10 @@
 		"get"
 	],
 	"dependencies": {
-		"arrify": "^1.0.0",
-		"dot-prop-immutable": "^1.5.0"
 	},
 	"devDependencies": {
-		"ava": "*",
-		"xo": "*"
+		"@babel/cli": "^7.2.3",
+		"@babel/core": "^7.3.3",
+		"@babel/preset-env": "^7.3.1"
 	}
 }
