@@ -1,5 +1,5 @@
 'use strict';
-const dotProp = require('dot-prop');
+const dotProp = require('dot-prop-immutable');
 const arrify = require('arrify');
 
 const dotPropGet = dotProp.get;
